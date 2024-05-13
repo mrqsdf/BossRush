@@ -1,0 +1,114 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+
+}
+
+group = 'fr.mrqsdf'
+version = '1.0'
+
+
+project.ext.lwjglVersion = "3.3.3"
+project.ext.lwjglNatives = "natives-windows"
+project.ext.jomlVersion = "1.9.23"
+project.ext.imguiVersion = '1.81.0'
+sourceCompatibility = 16
+
+
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+    jcenter()
+    mavenCentral()
+}
+
+publishing {
+    publications {
+        GameEngine2D(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            name = 'myRepo'
+            url = layout.buildDirectory.dir("repo")
+        }
+    }
+}
+
+dependencies {
+    //box 2d
+    implementation name : 'jbox2d-library'
+
+    //testCompile group: 'junit', name: 'junit', version: '4.12'
+    implementation 'com.google.code.gson:gson:2.10'
+
+    // ImGUI stuff
+    implementation "io.github.spair:imgui-java-app:$imguiVersion"
+
+
+
+    // LWJGL stuff
+    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+
+    implementation "org.lwjgl:lwjgl"
+    implementation "org.lwjgl:lwjgl-assimp"
+    implementation "org.lwjgl:lwjgl-glfw"
+    implementation "org.lwjgl:lwjgl-nfd"
+    implementation "org.lwjgl:lwjgl-openal"
+    implementation "org.lwjgl:lwjgl-opengl"
+    implementation "org.lwjgl:lwjgl-stb"
+    runtimeOnly "org.lwjgl:lwjgl::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-assimp::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-glfw::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-nfd::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-openal::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-opengl::$lwjglNatives"
+    runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
+    implementation "org.joml:joml:${jomlVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}
+targetCompatibility = JavaVersion.VERSION_16
+
+jar {
+    manifest {
+        attributes "Main-Class": "fr.mrqsdf.bossrush.Main"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+task FatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'fr.mrqsdf.bossrush.Main'
+    }
+    archiveBaseName = 'GameEngine2D'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task copyAssets(type: Copy) {
+    copy {
+        from "assets"
+        into "${buildDir}/libs/assets"
+    }
+
+    copy{
+        from "Prefabs.txt"
+        into "${buildDir}/libs"
+    }
+}

@@ -1,0 +1,140 @@
+[
+  {
+    "uid": 1113,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "fr.mrqsdf.engine2d.jade.Transform",
+        "properties": {
+          "position": {
+            "x": 15.375,
+            "y": -1.375
+          },
+          "scale": {
+            "x": 0.25,
+            "y": 0.25
+          },
+          "rotation": 0.0,
+          "zIndex": 2147483647,
+          "uid": 3
+        }
+      },
+      {
+        "type": "fr.mrqsdf.engine2d.components.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "filepath": "assets\\images\\bossrush\\tileset\\Dungeon_Tile_Set2.png",
+              "width": 240,
+              "height": 144
+            },
+            "texCoords": [
+              {
+                "x": 0.13333334,
+                "y": 0.8888889
+              },
+              {
+                "x": 0.13333334,
+                "y": 0.7777778
+              },
+              {
+                "x": 0.06666667,
+                "y": 0.7777778
+              },
+              {
+                "x": 0.06666667,
+                "y": 0.8888889
+              }
+            ]
+          },
+          "uid": 4
+        }
+      },
+      {
+        "type": "fr.mrqsdf.engine2d.components.NonPickable",
+        "properties": {
+          "uid": 6
+        }
+      }
+    ],
+    "doSerialisation": true,
+    "isDead": false
+  },
+  {
+    "uid": 1114,
+    "name": "Sprite_Object_Gen",
+    "components": [
+      {
+        "type": "fr.mrqsdf.engine2d.jade.Transform",
+        "properties": {
+          "position": {
+            "x": 5.625,
+            "y": -1.125
+          },
+          "scale": {
+            "x": 0.25,
+            "y": 0.25
+          },
+          "rotation": 0.0,
+          "zIndex": 2147483647,
+          "uid": 53
+        }
+      },
+      {
+        "type": "fr.mrqsdf.engine2d.components.SpriteRenderer",
+        "properties": {
+          "color": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0,
+            "w": 1.0
+          },
+          "sprite": {
+            "width": 16.0,
+            "height": 16.0,
+            "texture": {
+              "filepath": "assets\\images\\bossrush\\tileset\\Dungeon_Tile_Set2.png",
+              "width": 240,
+              "height": 144
+            },
+            "texCoords": [
+              {
+                "x": 0.13333334,
+                "y": 1.0
+              },
+              {
+                "x": 0.13333334,
+                "y": 0.8888889
+              },
+              {
+                "x": 0.06666667,
+                "y": 0.8888889
+              },
+              {
+                "x": 0.06666667,
+                "y": 1.0
+              }
+            ]
+          },
+          "uid": 54
+        }
+      },
+      {
+        "type": "fr.mrqsdf.engine2d.components.NonPickable",
+        "properties": {
+          "uid": 93
+        }
+      }
+    ],
+    "doSerialisation": true,
+    "isDead": false
+  }
+]
