@@ -7,6 +7,7 @@ import fr.mrqsdf.engine2d.jade.Window;
 
 public class MobsComponent extends EntityComponent {
 
+    public int healRegen = 1;
 
     public MobsComponent(EntityType entityType, int level){
         super(entityType, level);

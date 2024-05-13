@@ -1,13 +1,18 @@
 package fr.mrqsdf.bossrush.component;
 
+import fr.mrqsdf.bossrush.animation.mobs.SlimeAnimation;
 import fr.mrqsdf.bossrush.animation.player.PlayerAnimationTrigger;
+import fr.mrqsdf.bossrush.res.DisplayState;
 import fr.mrqsdf.bossrush.res.GameState;
+import fr.mrqsdf.bossrush.res.MobAction;
+import fr.mrqsdf.bossrush.scene.GameSceneInitializer;
+import fr.mrqsdf.bossrush.util.Algorithme;
+import fr.mrqsdf.bossrush.util.Utils;
 import fr.mrqsdf.engine2d.components.Component;
 import fr.mrqsdf.engine2d.components.HudComponent;
 import fr.mrqsdf.engine2d.components.StateMachine;
 import fr.mrqsdf.engine2d.editor.AssetsWindow;
 import fr.mrqsdf.engine2d.jade.*;
-import fr.mrqsdf.engine2d.utils.EngineSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +61,44 @@ public class GameCamera extends Component {
                 GameState.gameState = GameState.WAIT;
                 moveLeft = moveLeftMax;
                 cameraGameObject.getComponent(StateMachine.class).trigger(PlayerAnimationTrigger.IDLE);
+                GameObject mobHealHud = Window.getScene().createGameObject("MobHealHud");
+                mobHealHud.setNoSerialize();
+                HudComponent mobHealHudComponent = new HudComponent();
+                GameSceneInitializer.drawDisplay("MobHealHudFull",cameraGameObject.transform.position.x + 3.5f,2.175f,-1f,0.175f, mobHealHudComponent, Window.getScene(), DisplayState.MOB_HEAL_HUD_FULL,"assets/spritesheets/hud/HealBar.spsheet", 5);
+                GameSceneInitializer.drawDisplay("MobHealHudEmpty",cameraGameObject.transform.position.x + 3.5f,2.175f,-1f,0.175f, mobHealHudComponent, Window.getScene(), DisplayState.MOB_HEAL_HUD_EMPTY,"assets/spritesheets/hud/HealBarEmpty.spsheet",4);
+
+                mobHealHud.addComponent(mobHealHudComponent);
+                Window.getScene().addGameObjectToScene(mobHealHud);
+
+                GameObject slime = SlimeAnimation.playerGameObject(
+                        AssetsWindow.getSpriteSheet("assets/spritesheets/entity/slime/SlimeSpriteSheet.spsheet"),
+                        1f,1,cameraGameObject.transform.position.x + 3.5f,0.73f);
+                slime.setNoSerialize();
+                Window.getScene().addGameObjectToScene(slime);
+
+                setActualEnemy(slime);
             }
         }
-        else {
-            if (!getActualEnemy().getComponent(EntityComponent.class).isAlive()){
+        else if (GameState.gameState == GameState.WAIT){
+            if (getActualEnemy() != null && !getActualEnemy().getComponent(EntityComponent.class).isAlive()){
+                getActualEnemy().destroy();
+                for (GameObject go : Window.getScene().getGameObjectsWithComponent(DisplayComponent.class)){
+                    if (go.getComponent(DisplayComponent.class).displayState == DisplayState.MOB_HEAL_HUD_FULL){
+                        go.destroy();
+                    }
+                    if (go.getComponent(DisplayComponent.class).displayState == DisplayState.MOB_HEAL_HUD_EMPTY){
+                        go.destroy();
+                    }
+                    if (go.getComponent(DisplayComponent.class).displayState == DisplayState.MOB_MANA_HUD_FULL){
+                        go.destroy();
+                    }
+                    if (go.getComponent(DisplayComponent.class).displayState == DisplayState.MOB_MANA_HUD_EMPTY){
+                        go.destroy();
+                    }
+                }
                 setActualEnemy(null);
                 GameState.gameState = GameState.MOVE;
+                cameraGameObject.getComponent(StateMachine.class).trigger(PlayerAnimationTrigger.RUN);
             } else if (!cameraGameObject.getComponent(EntityComponent.class).isAlive() && !gameover) {
                 System.out.println("Game Over");
                 gameover = true;
@@ -72,6 +109,18 @@ public class GameCamera extends Component {
                 gameOver.setNoSerialize();
                 Window.getScene().addGameObjectToScene(gameOver);
             }
+        }
+        else if (GameState.gameState == GameState.MOB_ACTION) {
+            MobAction mobAction = Algorithme.mobAlgorithm(getActualEnemy(), cameraGameObject);
+            if (mobAction == MobAction.ATTACK){
+                Utils.attack(getActualEnemy(), cameraGameObject, false);
+            }
+            else if (mobAction == MobAction.CRITICAL){
+                Utils.attack(getActualEnemy(), cameraGameObject, true);
+            } else if (mobAction == MobAction.HEAL) {
+                getActualEnemy().getComponent(MobsComponent.class).receiveHeal(getActualEnemy().getComponent(MobsComponent.class).healRegen);
+            }
+            GameState.gameState = GameState.WAIT;
         }
     }
 

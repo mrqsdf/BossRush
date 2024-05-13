@@ -1,15 +1,15 @@
-package fr.mrqsdf.bossrush.animation.mobs.slime;
+package fr.mrqsdf.bossrush.animation.mobs;
 
 import fr.mrqsdf.engine2d.components.AnimationType;
 
-public enum SlimeAnimationType implements AnimationType {
+public enum MobAnimationType implements AnimationType {
 
     IDLE("idle"),
     ATTACK("attack"),
     TAKING_DAMAGE("takingDamage"),
     DEATH("death");
 
-    SlimeAnimationType(String name){
+    MobAnimationType(String name){
         this.name = name;
     }
     private final String name;

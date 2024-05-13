@@ -6,7 +6,7 @@ public enum GameState {
     CAN_MOVE,
     WAIT,
     PLAYER_ACTION,
-    MOB_ATTACK,
+    MOB_ACTION,
     ;
 
     public static GameState gameState = WAIT;

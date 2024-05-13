@@ -1,6 +1,6 @@
 package fr.mrqsdf.bossrush.scene;
 
-import fr.mrqsdf.bossrush.animation.mobs.slime.SlimeAnimation;
+import fr.mrqsdf.bossrush.animation.mobs.SlimeAnimation;
 import fr.mrqsdf.bossrush.animation.player.PlayerAnimation;
 import fr.mrqsdf.bossrush.component.DisplayComponent;
 import fr.mrqsdf.bossrush.component.GameCamera;
@@ -15,7 +15,6 @@ import fr.mrqsdf.engine2d.editor.AssetsWindow;
 import fr.mrqsdf.engine2d.jade.GameObject;
 import fr.mrqsdf.engine2d.scenes.Scene;
 import fr.mrqsdf.engine2d.scenes.SceneInitializer;
-import fr.mrqsdf.engine2d.utils.AssetPool;
 import org.joml.Vector2f;
 
 public class GameSceneInitializer extends SceneInitializer {
@@ -39,7 +38,6 @@ public class GameSceneInitializer extends SceneInitializer {
         drawDisplay("HudGame_Attack",3.75f,2f, hudComponent, scene, DisplayState.ATTACK);
         drawDisplay("HudGame_Defence",3.75f,1.70f, hudComponent, scene, DisplayState.DEFEND);
         drawDisplay("HudGame_Inventory",3.75f,1.4f, hudComponent, scene, DisplayState.INVENTORY);
-        drawDisplay("HudGame_Move",3.75f,1.10f, hudComponent, scene, DisplayState.MOVE);
 
         hudGame.addComponent(hudComponent);
         scene.addGameObjectToScene(hudGame);
@@ -105,7 +103,7 @@ public class GameSceneInitializer extends SceneInitializer {
         scene.addGameObjectToScene(hudAttack);
         hudComponent.addObject(hudAttack);
     }
-    private static void drawDisplay(String label, float posX, float posY,float sizeX, float sizeY, HudComponent hudComponent, Scene scene, DisplayState state, String filePath, int zIndex){
+    public static void drawDisplay(String label, float posX, float posY,float sizeX, float sizeY, HudComponent hudComponent, Scene scene, DisplayState state, String filePath, int zIndex){
         GameObject hudAttack = scene.createGameObject(label);
         hudAttack.setNoSerialize();
         hudAttack.addComponent(new HudObjectComponent());

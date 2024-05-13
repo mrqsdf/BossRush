@@ -46,6 +46,18 @@ public class StateMachine extends Component {
         }
         System.out.println("Unable to find state: " + defaultStateTypeName);
     }
+    public void setDefaultState(TriggerType triggerType){
+        for (AnimationState state : states){
+            if (state.animationTypeName.equals(triggerType.getName())){
+                defaultStateTypeName = triggerType.getName();
+                if (currentState == null){
+                    currentState = state;
+                    return;
+                }
+            }
+        }
+        System.out.println("Unable to find state: " + defaultStateTypeName);
+    }
     public void setStates(List<AnimationState> states){
         this.states = states;
     }

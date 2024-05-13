@@ -3,7 +3,7 @@ package fr.mrqsdf.engine2d.components;
 import fr.mrqsdf.engine2d.renderer.Texture;
 import org.joml.Vector2f;
 
-public class Sprite implements Cloneable{
+public class Sprite implements Cloneable {
 
     private float width, height;
     private Texture texture = null;

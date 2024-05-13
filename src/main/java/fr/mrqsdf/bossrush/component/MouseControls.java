@@ -1,7 +1,6 @@
 package fr.mrqsdf.bossrush.component;
 
 import fr.mrqsdf.bossrush.animation.player.PlayerAnimationTrigger;
-import fr.mrqsdf.bossrush.res.DisplayState;
 import fr.mrqsdf.bossrush.res.GameState;
 import fr.mrqsdf.bossrush.util.Utils;
 import fr.mrqsdf.engine2d.components.Component;
@@ -12,6 +11,8 @@ import fr.mrqsdf.engine2d.jade.Window;
 import fr.mrqsdf.engine2d.renderer.PickingTexture;
 import fr.mrqsdf.engine2d.scenes.Scene;
 
+import java.util.Random;
+
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class MouseControls extends Component {
@@ -19,10 +20,23 @@ public class MouseControls extends Component {
     private float debounceTime = 0.2f;
     private float debounce = debounceTime;
 
+    private float switchGameStatesTime = 0.8f;
+    private float switchGameStates = switchGameStatesTime;
+
     @Override
     public void update(float dt){
         debounce -= dt;
-        PickingTexture pickingTexture = Window.getImGuiLayer().getPropertiesWindows().getPickingTexture();
+        if (GameState.gameState != GameState.MOB_ACTION) switchGameStates -= dt;
+        if (switchGameStates < 0 ){
+            if (GameState.gameState == GameState.PLAYER_ACTION){
+                GameState.gameState = GameState.MOB_ACTION;
+                switchGameStates = switchGameStatesTime;
+            }if (GameState.gameState != GameState.WAIT && GameState.MOVE != GameState.gameState && GameState.gameState != GameState.MOB_ACTION){
+                GameState.gameState = GameState.WAIT;
+            }
+        }
+
+        PickingTexture pickingTexture = Window.get().pickingTexture;
         Scene currentScene = Window.getScene();
         if (!MouseListener.isDragging() && MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT) && debounce < 0){
             int x = (int)MouseListener.getScreenX();
@@ -34,25 +48,26 @@ public class MouseControls extends Component {
                 if (displayComponent != null){
                     GameCamera gameCamera = gameObject.getComponent(GameCamera.class);
                     StateMachine stateMachine = gameCamera.cameraGameObject.getComponent(StateMachine.class);
-                    switch (displayComponent.displayState){
-                        case ATTACK -> {
-                            System.out.println("Player Attack");
-                            GameState.gameState = GameState.PLAYER_ACTION;
-                            stateMachine.trigger(PlayerAnimationTrigger.ATTACK);
-                            Utils.attack(gameCamera.cameraGameObject, gameCamera.getActualEnemy());
-                        }
-                        case DEFEND -> {
-                            System.out.println("Player Defend");
-                            GameState.gameState = GameState.PLAYER_ACTION;
-                            stateMachine.trigger(PlayerAnimationTrigger.DEFEND);
-                        }
-                        case INVENTORY -> {
-                            System.out.println("Player open inventory");
-                        }
-                        case MOVE -> {
-                            System.out.println("Player Move");
-                            GameState.gameState = GameState.MOVE;
-                            stateMachine.trigger(PlayerAnimationTrigger.RUN);
+                    if (!gameCamera.gameover && GameState.gameState == GameState.WAIT){
+                        switch (displayComponent.displayState){
+                            case ATTACK -> {
+                                System.out.println("Player Attack");
+                                GameState.gameState = GameState.PLAYER_ACTION;
+                                stateMachine.trigger(PlayerAnimationTrigger.ATTACK);
+                                double rd = new Random().nextDouble();
+                                boolean isCritical = rd < gameCamera.cameraGameObject.getComponent(EntityComponent.class).criticalChance;
+                                Utils.attack(gameCamera.cameraGameObject, gameCamera.getActualEnemy(),isCritical);
+                                switchGameStates = switchGameStatesTime;
+                            }
+                            case DEFEND -> {
+                                System.out.println("Player Defend");
+                                GameState.gameState = GameState.PLAYER_ACTION;
+                                stateMachine.trigger(PlayerAnimationTrigger.DEFEND);
+                                switchGameStates = switchGameStatesTime;
+                            }
+                            case INVENTORY -> {
+                                System.out.println("Player open inventory");
+                            }
                         }
                     }
                 }

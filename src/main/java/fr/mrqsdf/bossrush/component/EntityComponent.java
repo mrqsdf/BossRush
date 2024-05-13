@@ -11,13 +11,21 @@ public abstract class EntityComponent extends Component {
 
     private int heal = 20;
     private int maxHeal = 20;
+    private int defaultHeal = 20;
     private int mana = 20;
     private int maxMana = 20;
+    private int defaultMana = 20;
     private int armor = 0;
     private int maxArmor = 0;
+    private int defaultArmor = 0;
     private int damage = 2;
+    private int defaultDamage = 2;
+    public double criticalChance = 0;
+    public double criticalDamage = 0;
 
     public transient int level = 1;
+
+    public boolean isDefending = false;
 
     public transient GameObject healBar;
     public transient GameObject healBarEmpty;
@@ -39,13 +47,13 @@ public abstract class EntityComponent extends Component {
     }
 
     private void setLevel(){
-        maxHeal = 20 + 5 * level;
+        maxHeal = defaultHeal + 5 * level-1;
         heal = maxHeal;
-        maxMana = 20 + 5 * level;
+        maxMana = defaultMana + 5 * level-1;
         mana = maxMana;
-        maxArmor = 2 * level;
+        maxArmor = defaultArmor * level-1;
         armor = maxArmor;
-        damage = 2 + 2 * level;
+        damage = defaultDamage + 2 * level-1;
     }
 
     public void levelUp(){
@@ -97,19 +105,36 @@ public abstract class EntityComponent extends Component {
         this.mana = mana;
     }
 
+    public void setDefaultHeal(int defaultHeal) {
+        this.defaultHeal = defaultHeal;
+    }
+
+    public void setDefaultMana(int defaultMana) {
+        this.defaultMana = defaultMana;
+    }
+
+    public void setDefaultArmor(int defaultArmor) {
+        this.defaultArmor = defaultArmor;
+    }
+
+    public void setDefaultDamage(int defaultDamage) {
+        this.defaultDamage = defaultDamage;
+    }
+
     public void receiveDamage(int damageTake){
         if (heal > 0) {
-            heal -= Math.max(0, damageTake - armor);
+            heal -= Math.max(0, damageTake - (isDefending ? armor : 0));
         } else {
             heal = 0;
         }
         if (heal <=0) alive = false;
-        System.out.println("heal = " + heal + " alive = " + alive);
+        isDefending = false;
     }
 
     public void receiveHeal(int helling){
         heal += helling;
         if (heal > maxHeal) heal = maxHeal;
+        isDefending = false;
     }
 
     public EntityType getEntityType() {

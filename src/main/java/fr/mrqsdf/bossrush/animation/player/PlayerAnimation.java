@@ -67,6 +67,7 @@ public class PlayerAnimation {
             death.addFrame(spriteSheet1.getSprite(i), 0.1f);
         }
         death.animationTypeName = PlayerAnimationType.DEATH.getName();
+        death.returnToDefault = false;
         death.setLoop(false);
         spellCast.title = PlayerAnimationType.SPELL_CAST.name;
         for (int i = 53; i < 53+8; i++) {
@@ -92,7 +93,7 @@ public class PlayerAnimation {
         }
         StateMachine stateMachine = new StateMachine();
         stateMachine.setStates(playerAnimation);
-        stateMachine.setDefaultState(PlayerAnimationType.IDLE);
+        stateMachine.setDefaultState(PlayerAnimationTrigger.IDLE);
 
         stateMachine.addStateTrigger(new StateTrigger(PlayerAnimationType.RUN, PlayerAnimationTrigger.IDLE,0), PlayerAnimationType.IDLE);
         stateMachine.addStateTrigger(new StateTrigger(PlayerAnimationType.RUN, PlayerAnimationTrigger.WALK,1), PlayerAnimationType.WALK);

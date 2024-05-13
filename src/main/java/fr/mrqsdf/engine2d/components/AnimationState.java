@@ -15,6 +15,7 @@ public class AnimationState {
     public transient int currentSprite = 0;
     public boolean doesLoop = false;
     public boolean animationEnd = false;
+    public boolean returnToDefault = true;
 
     public void refreshTextures(){
         for (Frame frame : animationFrames){
@@ -38,7 +39,7 @@ public class AnimationState {
             if (timeTracker <= 0){
                 if (currentSprite < animationFrames.size() - 1 || doesLoop){
                     currentSprite = (currentSprite + 1) % animationFrames.size();
-                } else if (currentSprite == animationFrames.size() - 1){
+                } else if (currentSprite == animationFrames.size() - 1 && returnToDefault){
                     animationEnd = true;
                 }
                 timeTracker = animationFrames.get(currentSprite).frameTime;

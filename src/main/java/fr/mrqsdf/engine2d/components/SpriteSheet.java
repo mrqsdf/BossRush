@@ -10,7 +10,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpriteSheet  {
+public class SpriteSheet {
 
     private Texture texture;
     private List<Sprite> sprites;
@@ -113,6 +113,5 @@ public class SpriteSheet  {
     public String getName(){
         return name;
     }
-
 
 }
