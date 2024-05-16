@@ -17,6 +17,8 @@ import fr.mrqsdf.engine2d.jade.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.mrqsdf.bossrush.scene.GamePlay.drawDisplay;
+
 public class GameCamera extends Component {
 
     public transient GameObject cameraGameObject;
@@ -64,8 +66,8 @@ public class GameCamera extends Component {
                 GameObject mobHealHud = Window.getScene().createGameObject("MobHealHud");
                 mobHealHud.setNoSerialize();
                 HudComponent mobHealHudComponent = new HudComponent();
-                GameSceneInitializer.drawDisplay("MobHealHudFull",cameraGameObject.transform.position.x + 3.5f,2.175f,-1f,0.175f, mobHealHudComponent, Window.getScene(), DisplayState.MOB_HEAL_HUD_FULL,"assets/spritesheets/hud/HealBar.spsheet", 5);
-                GameSceneInitializer.drawDisplay("MobHealHudEmpty",cameraGameObject.transform.position.x + 3.5f,2.175f,-1f,0.175f, mobHealHudComponent, Window.getScene(), DisplayState.MOB_HEAL_HUD_EMPTY,"assets/spritesheets/hud/HealBarEmpty.spsheet",4);
+                drawDisplay("MobHealHudFull",cameraGameObject.transform.position.x + 3.5f,2.175f,-1f,0.175f, mobHealHudComponent, Window.getScene(), DisplayState.MOB_HEAL_HUD_FULL,"assets/spritesheets/hud/HealBar.spsheet", 5);
+                drawDisplay("MobHealHudEmpty",cameraGameObject.transform.position.x + 3.5f,2.175f,-1f,0.175f, mobHealHudComponent, Window.getScene(), DisplayState.MOB_HEAL_HUD_EMPTY,"assets/spritesheets/hud/HealBarEmpty.spsheet",4);
 
                 mobHealHud.addComponent(mobHealHudComponent);
                 Window.getScene().addGameObjectToScene(mobHealHud);

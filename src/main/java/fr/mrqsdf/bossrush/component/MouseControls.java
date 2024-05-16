@@ -31,18 +31,21 @@ public class MouseControls extends Component {
             if (GameState.gameState == GameState.PLAYER_ACTION){
                 GameState.gameState = GameState.MOB_ACTION;
                 switchGameStates = switchGameStatesTime;
-            }if (GameState.gameState != GameState.WAIT && GameState.MOVE != GameState.gameState && GameState.gameState != GameState.MOB_ACTION){
+            }
+            if (GameState.gameState != GameState.WAIT && GameState.MOVE != GameState.gameState && GameState.gameState != GameState.MOB_ACTION){
                 GameState.gameState = GameState.WAIT;
             }
         }
-
         PickingTexture pickingTexture = Window.get().pickingTexture;
         Scene currentScene = Window.getScene();
         if (!MouseListener.isDragging() && MouseListener.mouseButtonDown(GLFW_MOUSE_BUTTON_LEFT) && debounce < 0){
             int x = (int)MouseListener.getScreenX();
             int y = (int)MouseListener.getScreenY();
+            System.out.println(x + " " + y);
             int gameObjectId = pickingTexture.readPixel(x, y);
+            System.out.println(gameObjectId);
             GameObject pickedObj = currentScene.getGameObject(gameObjectId);
+            System.out.println(pickedObj);
             if (pickedObj != null){
                 DisplayComponent displayComponent = pickedObj.getComponent(DisplayComponent.class);
                 if (displayComponent != null){

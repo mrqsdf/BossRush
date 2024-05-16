@@ -5,6 +5,7 @@ public enum DisplayState {
     ATTACK,
     DEFEND,
     INVENTORY,
+    ITEM,
     MOVE,
     PLAYER_HEAL_HUD_FULL,
     PLAYER_HEAL_HUD_EMPTY,

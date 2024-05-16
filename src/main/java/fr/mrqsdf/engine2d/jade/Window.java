@@ -10,6 +10,7 @@ import fr.mrqsdf.engine2d.scenes.LevelEditorSceneInitializer;
 import fr.mrqsdf.engine2d.scenes.Scene;
 import fr.mrqsdf.engine2d.scenes.SceneInitializer;
 import fr.mrqsdf.engine2d.utils.*;
+import org.joml.Vector2f;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -178,6 +179,9 @@ public class Window implements Observer {
             new Levels("New Level", 0);
         }
         new Folder("assets");
+        this.imGuiLayer = new ImGuiLayer(glfwWindow, pickingTexture);
+        Vector2f windowSize = new Vector2f(this.width, this.height);
+        Vector2f WindowPos = new Vector2f(0, 0);
         if (RELEASE_BUILD) {
             runtimePlaying = true;
             try {
@@ -187,8 +191,9 @@ public class Window implements Observer {
                 throw new RuntimeException(e);
             }
             Window.changeScene(gameScene, 0); //todo change this to a main game scene
+            MouseListener.setGameViewportPos(WindowPos);
+            MouseListener.setGameViewportSize(windowSize);
         } else {
-            this.imGuiLayer = new ImGuiLayer(glfwWindow, pickingTexture);
             this.imGuiLayer.initImGui();
             try {
                 editorScene = editorScene.getClass().getDeclaredConstructor().newInstance();

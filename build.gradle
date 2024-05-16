@@ -8,7 +8,7 @@ plugins {
 }
 
 group = 'fr.mrqsdf'
-version = '1.0'
+version = '0.1'
 
 
 project.ext.lwjglVersion = "3.3.3"
@@ -95,7 +95,7 @@ task FatJar(type: Jar) {
     manifest {
         attributes 'Main-Class': 'fr.mrqsdf.bossrush.Main'
     }
-    archiveBaseName = 'GameEngine2D'
+    archiveBaseName = 'BossRush'
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     with jar
