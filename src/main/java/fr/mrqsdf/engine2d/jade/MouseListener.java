@@ -13,7 +13,7 @@ public class MouseListener {
 
     private static MouseListener instance;
     private double scrollX, scrollY;
-    public double xPos, yPos, lastY, lastX, worldX, worldY, lastWorldX, lastWorldY;
+    private double xPos, yPos, lastY, lastX, worldX, worldY, lastWorldX, lastWorldY;
     private boolean mouseButtonPressed[] = new boolean[9];
     private boolean isDragging;
 
@@ -198,5 +198,4 @@ public class MouseListener {
     public static void setGameViewportSize(Vector2f gameViewportSize) {
         get().gameViewportSize.set(gameViewportSize);
     }
-
 }

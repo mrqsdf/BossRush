@@ -33,6 +33,11 @@ public abstract class EntityComponent extends Component {
     public transient GameObject manaBarEmpty;
 
     private boolean alive = true;
+
+    private boolean isPoisoned = false;
+
+    private int poisonDamage = 0;
+
     private EntityType entityType;
 
     public EntityComponent(EntityType entityType){
@@ -121,7 +126,13 @@ public abstract class EntityComponent extends Component {
         this.defaultDamage = defaultDamage;
     }
 
+    public void setPoisonDamage(int poisonDamage) {
+        this.isPoisoned = true;
+        this.poisonDamage = poisonDamage;
+    }
+
     public void receiveDamage(int damageTake){
+        if (isPoisoned) damageTake += poisonDamage;
         if (heal > 0) {
             heal -= Math.max(0, damageTake - (isDefending ? armor : 0));
         } else {
@@ -135,6 +146,11 @@ public abstract class EntityComponent extends Component {
         heal += helling;
         if (heal > maxHeal) heal = maxHeal;
         isDefending = false;
+    }
+
+    public void receiveMana(int maning){
+        mana += maning;
+        if (mana > maxMana) mana = maxMana;
     }
 
     public EntityType getEntityType() {

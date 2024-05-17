@@ -22,7 +22,8 @@ public class Utils {
                 else target.getComponent(StateMachine.class).trigger(MobAnimationTrigger.DEATH);
             }
             if (attacker.getComponent(PlayerComponent.class) != null){
-                attacker.getComponent(StateMachine.class).trigger(PlayerAnimationTrigger.ATTACK);
+                if (!isCritical) attacker.getComponent(StateMachine.class).trigger(PlayerAnimationTrigger.ATTACK);
+                else attacker.getComponent(StateMachine.class).trigger(PlayerAnimationTrigger.COMBO_ATTACK);
             } else {
                 attacker.getComponent(StateMachine.class).trigger(MobAnimationTrigger.ATTACK);
             }

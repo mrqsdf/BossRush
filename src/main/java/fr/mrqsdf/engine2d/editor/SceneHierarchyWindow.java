@@ -22,6 +22,11 @@ public class SceneHierarchyWindow {
 
             boolean treeNodeOpen = doTreeNode(gameObject, index);
 
+            //si le noeud est cliqué, set le gameObject selectionné
+            if (ImGui.isItemClicked()){
+                Window.getImGuiLayer().getPropertiesWindows().setActiveGameObject(gameObject);
+            }
+
             if (treeNodeOpen){
                 ImGui.treePop();
             }

@@ -2,6 +2,8 @@ package fr.mrqsdf.bossrush.component;
 
 import fr.mrqsdf.bossrush.animation.player.PlayerAnimationTrigger;
 import fr.mrqsdf.bossrush.res.GameState;
+import fr.mrqsdf.bossrush.res.ItemType;
+import fr.mrqsdf.bossrush.res.PotionType;
 import fr.mrqsdf.bossrush.util.Utils;
 import fr.mrqsdf.engine2d.components.Component;
 import fr.mrqsdf.engine2d.components.StateMachine;
@@ -45,6 +47,7 @@ public class MouseControls extends Component {
             int gameObjectId = pickingTexture.readPixel(x, y);
             System.out.println(gameObjectId);
             GameObject pickedObj = currentScene.getGameObject(gameObjectId);
+            GameObject inventory = currentScene.getGameObjectWithComponent(InventoryComponent.class);
             System.out.println(pickedObj);
             if (pickedObj != null){
                 DisplayComponent displayComponent = pickedObj.getComponent(DisplayComponent.class);
@@ -61,6 +64,7 @@ public class MouseControls extends Component {
                                 boolean isCritical = rd < gameCamera.cameraGameObject.getComponent(EntityComponent.class).criticalChance;
                                 Utils.attack(gameCamera.cameraGameObject, gameCamera.getActualEnemy(),isCritical);
                                 switchGameStates = switchGameStatesTime;
+                                if (!gameCamera.getActualEnemy().getComponent(EntityComponent.class).isAlive()) GameState.gameState = GameState.WAIT;
                             }
                             case DEFEND -> {
                                 System.out.println("Player Defend");
@@ -70,6 +74,14 @@ public class MouseControls extends Component {
                             }
                             case INVENTORY -> {
                                 System.out.println("Player open inventory");
+                            }
+                            case ITEM -> {
+                                System.out.println("Player use item");
+                                ItemComponent itemComponent = pickedObj.getComponent(ItemComponent.class);
+                                InventoryComponent inventoryComponent = inventory.getComponent(InventoryComponent.class);
+                                itemComponent.use(gameCamera);
+                                inventoryComponent.removeItem(pickedObj);
+                                pickedObj.destroy();
                             }
                         }
                     }

@@ -2,6 +2,7 @@ package fr.mrqsdf.bossrush.scene;
 
 import fr.mrqsdf.bossrush.animation.mobs.SlimeAnimation;
 import fr.mrqsdf.bossrush.animation.player.PlayerAnimation;
+import fr.mrqsdf.bossrush.animation.potion.Potion;
 import fr.mrqsdf.bossrush.component.DisplayComponent;
 import fr.mrqsdf.bossrush.component.GameCamera;
 import fr.mrqsdf.bossrush.component.InventoryComponent;
@@ -10,11 +11,13 @@ import fr.mrqsdf.engine2d.components.HudComponent;
 import fr.mrqsdf.engine2d.components.HudObjectComponent;
 import fr.mrqsdf.engine2d.components.SpriteRenderer;
 import fr.mrqsdf.engine2d.editor.AssetsWindow;
+import fr.mrqsdf.engine2d.font.TextComponent;
 import fr.mrqsdf.engine2d.jade.GameObject;
 import fr.mrqsdf.engine2d.jade.Prefabs;
 import fr.mrqsdf.engine2d.jade.Transform;
 import fr.mrqsdf.engine2d.scenes.Scene;
 import org.joml.Vector2f;
+import org.joml.Vector4f;
 
 public class GamePlay {
 
@@ -49,8 +52,8 @@ public class GamePlay {
         GameObject hudGame = scene.createGameObject("HudGame");
         hudGame.setNoSerialize();
         HudComponent hudComponent = new HudComponent();
-        drawDisplay("HudGame_Attack",2.63f,2f -0.08f, hudComponent, scene, DisplayState.ATTACK,0);
-        drawDisplay("HudGame_Defence",2.63f,1.825f-0.08f, hudComponent, scene, DisplayState.DEFEND,1);
+        drawDisplay("HudGame_Attack",2.63f,1.92f, hudComponent, scene, DisplayState.ATTACK,0);
+        drawDisplay("HudGame_Defence",2.63f,1.745f, hudComponent, scene, DisplayState.DEFEND,1);
         //drawDisplay("HudGame_Inventory",3.75f,1.4f, hudComponent, scene, DisplayState.INVENTORY);
         hudGame.addComponent(hudComponent);
         scene.addGameObjectToScene(hudGame);
@@ -58,10 +61,45 @@ public class GamePlay {
         //INVENTORY
         GameObject inventory = Prefabs.generateSpriteObject(AssetsWindow.getSpriteSheet("assets/spritesheets/hud/Inventory.spsheet").getSprite(0), 1f,1f, 2f, 1.55f, 0, 5);
         inventory.setNoSerialize();
-        inventory.addComponent(new InventoryComponent(2,2));
-        inventory.addComponent(new HudComponent());
+        InventoryComponent inventoryComponent = new InventoryComponent(1.66f,1.9f);
+        HudComponent inventoryHudComponent = new HudComponent();
+        inventory.addComponent(inventoryComponent);
+        inventory.addComponent(inventoryHudComponent);
         inventory.addComponent(new DisplayComponent(DisplayState.INVENTORY));
         scene.addGameObjectToScene(inventory);
+
+        //POTION
+        for (int i =0; i < 5; i++){
+            GameObject healPotion = Potion.RedPotion(2.63f, 1.92f);
+            healPotion.setNoSerialize();
+            inventoryComponent.addItem(healPotion);
+            inventoryHudComponent.addObject(healPotion);
+            scene.addGameObjectToScene(healPotion);
+        }
+        for (int i =0; i < 5; i++){
+            GameObject healPotion = Potion.BluePotion(2.63f, 1.92f);
+            healPotion.setNoSerialize();
+            inventoryComponent.addItem(healPotion);
+            inventoryHudComponent.addObject(healPotion);
+            scene.addGameObjectToScene(healPotion);
+        }
+        for (int i =0; i < 5; i++){
+            GameObject healPotion = Potion.GreenPotion(2.63f, 1.92f);
+            healPotion.setNoSerialize();
+            inventoryComponent.addItem(healPotion);
+            inventoryHudComponent.addObject(healPotion);
+            scene.addGameObjectToScene(healPotion);
+        }
+
+        //TEXT TEST
+        GameObject text = scene.createGameObject("Text");
+        text.setNoSerialize();
+        text.addComponent(new HudObjectComponent());
+        text.transform.position = new Vector2f(2.5f, 1.5f);
+        text.transform.zIndex = 6;
+        text.addComponent(new TextComponent("ceci es un test", new Vector4f(0,0,0,1), 0.25f));
+        scene.addGameObjectToScene(text);
+
 
         //PLAYERHEALHUD
         GameObject playerHealHud = scene.createGameObject("PlayerHealHud");

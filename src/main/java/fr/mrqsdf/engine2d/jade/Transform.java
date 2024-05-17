@@ -2,11 +2,13 @@ package fr.mrqsdf.engine2d.jade;
 
 import fr.mrqsdf.engine2d.components.Component;
 import fr.mrqsdf.engine2d.editor.JImGui;
+import imgui.ImGui;
 import org.joml.Vector2f;
 
 public class Transform extends Component {
 
     public Vector2f position;
+    public boolean isVisible = true;
     public Vector2f scale;
     public float rotation = 0.0f;
     public int zIndex;
@@ -40,6 +42,9 @@ public class Transform extends Component {
         JImGui.drawVec2Control("Scale", this.scale, 0.25f);
         this.rotation = JImGui.dragFloat("Rotation", this.rotation);
         this.zIndex = JImGui.dragInt("Z-Index", this.zIndex);
+        if (ImGui.checkbox("Visible: ", this.isVisible)){
+            this.isVisible = !this.isVisible;
+        }
     }
 
     public void copy(Transform to) {

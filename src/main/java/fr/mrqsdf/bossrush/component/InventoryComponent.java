@@ -10,8 +10,12 @@ public class InventoryComponent extends Component {
 
     private List<GameObject> items = new ArrayList<>();
 
-    public final float offsetX = 0.175f;
-    public final float offsetY = 0.175f;
+    public final float offsetX = 0.23f;
+    public final float offsetY = 0.23f;
+
+    public final float newX = 0.34f;
+    public final float newY = 0.35f;
+
     public float origineX;
     public float origineY;
 
@@ -38,24 +42,26 @@ public class InventoryComponent extends Component {
     }
 
 
+    public void updateOrigine(){
+        origineX = gameObject.transform.position.x - newX;
+        origineY = gameObject.transform.position.y + newY;
+    }
+
     @Override
     public void update(float dt) {
+        updateOrigine();
         float x = origineX;
         float y = origineY;
         for (int i = 0; i < items.size(); i++) {
-
+            if (i % 4 == 0 && i != 0) {
+                x = origineX;
+                y -= offsetY;
+            }
             GameObject item = items.get(i);
             item.transform.position.x = x;
             item.transform.position.y = y;
             x += offsetX;
-            nextItemX += offsetX;
 
-            if (i % 4 == 0 && i != 0) {
-                x = origineX;
-                y += offsetY;
-                nextItemX = origineX;
-                nextItemY += offsetY;
-            }
         }
     }
 

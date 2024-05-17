@@ -57,7 +57,7 @@ public class Scene {
         for (int i=0; i < gameObjects.size(); i++) {
             GameObject go = gameObjects.get(i);
             go.start();
-            this.renderer.add(go);
+            if (go.transform.isVisible)this.renderer.add(go);
             this.physics2D.add(go);
         }
         isRunning = true;
@@ -69,7 +69,7 @@ public class Scene {
         } else {
             gameObjects.add(go);
             go.start();
-            this.renderer.add(go);
+            if (go.transform.isVisible)this.renderer.add(go);
             this.physics2D.add(go);
         }
     }
@@ -97,7 +97,7 @@ public class Scene {
         } else {
             gameObjects.add(pos, go);
             go.start();
-            this.renderer.add(go);
+            if (go.transform.isVisible)this.renderer.add(go);
             this.physics2D.add(go);
         }
     }
@@ -163,7 +163,11 @@ public class Scene {
         for (int i=0; i < gameObjects.size(); i++) {
             GameObject go = gameObjects.get(i);
             go.editorUpdate(dt);
-
+            if (!go.transform.isVisible) {
+                this.renderer.remove(go);
+            } else {
+                this.renderer.add(go);
+            }
             if (go.isDead()) {
                 System.out.println("Destroying " + go.name);
                 gameObjects.remove(i);
@@ -181,7 +185,11 @@ public class Scene {
         for (int i=0; i < gameObjects.size(); i++) {
             GameObject go = gameObjects.get(i);
             go.update(dt);
-
+            if (!go.transform.isVisible) {
+                this.renderer.remove(go);
+            } else {
+                this.renderer.add(go);
+            }
             if (go.isDead()) {
                 System.out.println("Destroying " + go.name);
                 gameObjects.remove(i);

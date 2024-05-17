@@ -19,9 +19,25 @@ public class Renderer {
 
     public void add(GameObject go){
         SpriteRenderer spr = go.getComponent(SpriteRenderer.class);
-        if (spr != null){
+        if (spr != null && !isPresent(spr)){
             add(spr);
         }
+    }
+
+    public void remove(GameObject go){
+        SpriteRenderer spr = go.getComponent(SpriteRenderer.class);
+        if (spr != null && isPresent(spr)){
+            remove(spr);
+        }
+    }
+
+    public boolean isPresent(SpriteRenderer spr){
+        for (RenderBatch batch : batches){
+            if (batch.spritePresent(spr)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void destroyGameObject(GameObject go){
@@ -53,7 +69,14 @@ public class Renderer {
             newBatch.addSprite(sprite);
             Collections.sort(batches);
         }
+    }
 
+    private void remove(SpriteRenderer sprite){
+        for (RenderBatch batch : batches){
+            if (batch.zIndex() == sprite.gameObject.transform.zIndex){
+                batch.removeSprite(sprite);
+            }
+        }
     }
 
     public static void bindShader(Shader shader){

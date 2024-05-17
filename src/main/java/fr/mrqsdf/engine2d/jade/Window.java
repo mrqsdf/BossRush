@@ -1,5 +1,8 @@
 package fr.mrqsdf.engine2d.jade;
 
+import fr.mrqsdf.engine2d.components.SpriteSheet;
+import fr.mrqsdf.engine2d.editor.AssetsWindow;
+import fr.mrqsdf.engine2d.font.TextData;
 import fr.mrqsdf.engine2d.observers.EventSystem;
 import fr.mrqsdf.engine2d.observers.Observer;
 import fr.mrqsdf.engine2d.observers.events.Event;
@@ -56,6 +59,10 @@ public class Window implements Observer {
     private int fps = 0;
 
     private long lastSecondTime = 0;
+
+    public static String font;
+    public static String aphaPath;
+
 
     private Window(){
         width = EngineSettings.WINDOW_WIDTH;
@@ -214,6 +221,14 @@ public class Window implements Observer {
 
         Shader defaultShader = AssetPool.getShader("assets/shaders/default.glsl");
         Shader pickingShader = AssetPool.getShader("assets/shaders/pickingShader.glsl");
+        if (aphaPath != null && font != null) {
+            SpriteSheet fontSheet = AssetsWindow.getSpriteSheet(aphaPath);
+            int i = 0;
+            for (Character c : font.toCharArray()) {
+                TextData.addCharacter(c, fontSheet.getSprite(i));
+                i++;
+            }
+        }
         Prefabs.load();
         while (!glfwWindowShouldClose(glfwWindow)){
 

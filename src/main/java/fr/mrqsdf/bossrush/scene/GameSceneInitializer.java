@@ -20,7 +20,6 @@ public class GameSceneInitializer extends SceneInitializer {
 
     @Override
     public void init(Scene scene) {
-        AssetsGestion.setAssets();
         GameObject gameCamera = scene.createGameObject("GameCamera");
         gameCamera.setNoSerialize();
         gameCamera.addComponent(new MouseControls());
@@ -30,8 +29,6 @@ public class GameSceneInitializer extends SceneInitializer {
         scene.addGameObjectToScene(gameCamera);
 
         GamePlay.generateLevel(scene, gameCamera);
-
-
 
 
     }
