@@ -94,10 +94,13 @@ public class GamePlay {
         //TEXT TEST
         GameObject text = scene.createGameObject("Text");
         text.setNoSerialize();
-        text.addComponent(new HudObjectComponent());
+        HudComponent textHudComponent = new HudComponent();
+        text.addComponent(textHudComponent);
         text.transform.position = new Vector2f(2.5f, 1.5f);
         text.transform.zIndex = 6;
-        text.addComponent(new TextComponent("ceci es un test", new Vector4f(0,0,0,1), 0.25f));
+        TextComponent textComponent = new TextComponent("ceci es un test", new Vector4f(1,0,0,1), 0.175f);
+        textComponent.setHudComponent(textHudComponent);
+        text.addComponent(textComponent);
         scene.addGameObjectToScene(text);
 
 

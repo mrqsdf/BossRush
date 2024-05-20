@@ -1,8 +1,6 @@
 package fr.mrqsdf.engine2d.font;
 
-import fr.mrqsdf.engine2d.components.Component;
-import fr.mrqsdf.engine2d.components.Sprite;
-import fr.mrqsdf.engine2d.components.SpriteRenderer;
+import fr.mrqsdf.engine2d.components.*;
 import fr.mrqsdf.engine2d.jade.GameObject;
 import fr.mrqsdf.engine2d.jade.Prefabs;
 import fr.mrqsdf.engine2d.jade.Window;
@@ -19,12 +17,23 @@ public class TextComponent extends Component {
     public float size;
     private List<GameObject> characters = new ArrayList<>();
     private boolean isVisible = false;
+    private List<Component> characterComponents = new ArrayList<>();
+    private HudComponent hudComponent;
 
     public TextComponent(String text, Vector4f color, float size){
         this.text = text;
         this.color = color;
         this.size = size;
     }
+
+    public void addCharacterComponent(Component component){
+        characterComponents.add(component);
+    }
+
+    public void setHudComponent(HudComponent hudComponent){
+        this.hudComponent = hudComponent;
+    }
+
     @Override
     public void start(){
         float x =0;
@@ -40,8 +49,17 @@ public class TextComponent extends Component {
             characters.add(character);
             character.setNoSerialize();
             character.name = "TextCharacter";
+            if (hudComponent != null){
+                character.addComponent(new HudObjectComponent());
+                hudComponent.addObject(character);
+            }
+            for (Component component : characterComponents){
+                if (component instanceof HudComponent || component instanceof HudObjectComponent) continue;
+                character.addComponent(component);
+            }
             Window.getScene().addGameObjectToScene(character);
-            x += 1 * size;
+            if (c == ' ') x += 0.25f * size;
+            else x += 0.5f * size;
         }
     }
 
