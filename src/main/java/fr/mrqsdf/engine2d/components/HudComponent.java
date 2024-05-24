@@ -10,11 +10,25 @@ public class HudComponent extends Component {
     private List<GameObject> objects = new ArrayList<>();
 
     private Boolean[] objectPlaced = new Boolean[12];
+    private boolean isVisible = false;
 
     public HudComponent(List<GameObject> objects) {
         this.objects = objects;
     }
     public HudComponent() {
+    }
+
+    @Override
+    public void update(float dt){
+        if (gameObject.transform.isVisible &&!isVisible){
+            for (GameObject go : objects){
+                go.transform.isVisible = true;
+            }
+        } else if (!gameObject.transform.isVisible && isVisible){
+            for (GameObject go : objects){
+                go.transform.isVisible = false;
+            }
+        }
     }
 
     public void addObject(GameObject object) {

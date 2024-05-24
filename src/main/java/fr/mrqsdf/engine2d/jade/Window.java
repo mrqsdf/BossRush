@@ -53,7 +53,7 @@ public class Window implements Observer {
 
     private static Scene currentScene;
 
-    public static final boolean RELEASE_BUILD = false;
+    public static final boolean RELEASE_BUILD = true;
     public static final boolean DEBUG_BUILD = false;
 
     private int fps = 0;
@@ -62,6 +62,10 @@ public class Window implements Observer {
 
     public static String font;
     public static String aphaPath;
+
+
+    private Shader defaultShader;
+    private Shader pickingShader;
 
 
     private Window(){
@@ -146,6 +150,8 @@ public class Window implements Observer {
         glfwSetWindowSizeCallback(glfwWindow, (w, newWidth, newHeight) ->{
             Window.setWidth(newWidth);
             Window.setHeight(newHeight);
+            Vector2f WindowPos = new Vector2f(0, -50);
+            glfwSetWindowSize(glfwWindow, newWidth, newHeight);
         });
 
         glfwMakeContextCurrent(glfwWindow);
@@ -188,7 +194,17 @@ public class Window implements Observer {
         new Folder("assets");
         this.imGuiLayer = new ImGuiLayer(glfwWindow, pickingTexture);
         Vector2f windowSize = new Vector2f(this.width, this.height);
-        Vector2f WindowPos = new Vector2f(0, 0);
+        Vector2f WindowPos = new Vector2f(0, -50);
+        defaultShader = AssetPool.getShader("assets/shaders/default.glsl");
+        pickingShader = AssetPool.getShader("assets/shaders/pickingShader.glsl");
+        if (aphaPath != null && font != null) {
+            SpriteSheet fontSheet = AssetsWindow.getSpriteSheet(aphaPath);
+            int i = 0;
+            for (Character c : font.toCharArray()) {
+                TextData.addCharacter(c, fontSheet.getSprite(i));
+                i++;
+            }
+        }
         if (RELEASE_BUILD) {
             runtimePlaying = true;
             try {
@@ -218,17 +234,6 @@ public class Window implements Observer {
         float dt = -1.0f;
         float saveTime = 0.0f;
         float maxSaveTime = EngineSettings.TIME_SAVE * 60;
-
-        Shader defaultShader = AssetPool.getShader("assets/shaders/default.glsl");
-        Shader pickingShader = AssetPool.getShader("assets/shaders/pickingShader.glsl");
-        if (aphaPath != null && font != null) {
-            SpriteSheet fontSheet = AssetsWindow.getSpriteSheet(aphaPath);
-            int i = 0;
-            for (Character c : font.toCharArray()) {
-                TextData.addCharacter(c, fontSheet.getSprite(i));
-                i++;
-            }
-        }
         Prefabs.load();
         while (!glfwWindowShouldClose(glfwWindow)){
 

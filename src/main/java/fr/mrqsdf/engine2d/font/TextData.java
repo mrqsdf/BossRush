@@ -17,6 +17,9 @@ public class TextData {
         return characters.get(c);
     }
 
+    public static float spaceEscape = 0.25f;
+    public static float spaceWidth = 0.7f;
+
 
 
 }

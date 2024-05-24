@@ -13,6 +13,9 @@ public class PotionComponent extends ItemComponent {
     public PotionComponent(PotionType type) {
         super(ItemType.POTION);
         this.potionType = type;
+        this.usable = true;
+        this.name = type.name;
+        this.effect = type.effect;
     }
 
     @Override

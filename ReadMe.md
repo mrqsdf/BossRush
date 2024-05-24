@@ -5,6 +5,9 @@ List des Assets utilisé :
 - [Potion](https://flippurgatory.itch.io/animated-potion-assets-pack-free)
 - [Inventory](https://bragorn.itch.io/inventory-display)
 - [Fonts](https://mounirtohami.itch.io/minimalpixel-font)
+- [Items](https://ochiogrande.itch.io/free-assets-16x16-by-olteanu-v-3-0)
+- [Character State](https://arydian.itch.io/simple-sprite-inventory)
+
 tempo
 
 "abcdefghijklmnopqrstuvwyxzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,;?!:/éèàâîïôùç'\"-()[]{}<>@#$%£€&*+=|\\^°`~""

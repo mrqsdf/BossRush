@@ -6,6 +6,7 @@ import fr.mrqsdf.bossrush.animation.potion.Potion;
 import fr.mrqsdf.bossrush.component.DisplayComponent;
 import fr.mrqsdf.bossrush.component.GameCamera;
 import fr.mrqsdf.bossrush.component.InventoryComponent;
+import fr.mrqsdf.bossrush.res.DisplayItem;
 import fr.mrqsdf.bossrush.res.DisplayState;
 import fr.mrqsdf.engine2d.components.HudComponent;
 import fr.mrqsdf.engine2d.components.HudObjectComponent;
@@ -21,11 +22,14 @@ import org.joml.Vector4f;
 
 public class GamePlay {
 
+    public static DisplayItem displayItem;
+
     public static void generateLevel(Scene scene, GameObject gameCamera){
         //TODO
         generateHud(scene);
         Transform transform = generatePlayer(scene);
         generateEnemies(scene, gameCamera, transform);
+
     }
 
     private static void generateEnemies(Scene scene, GameObject gameCamera, Transform player){
@@ -91,17 +95,18 @@ public class GamePlay {
             scene.addGameObjectToScene(healPotion);
         }
 
-        //TEXT TEST
+        /*//TEXT TEST
         GameObject text = scene.createGameObject("Text");
         text.setNoSerialize();
         HudComponent textHudComponent = new HudComponent();
         text.addComponent(textHudComponent);
         text.transform.position = new Vector2f(2.5f, 1.5f);
         text.transform.zIndex = 6;
-        TextComponent textComponent = new TextComponent("ceci es un test", new Vector4f(1,0,0,1), 0.175f);
+        text.transform.isVisible = true;
+        TextComponent textComponent = new TextComponent("ABCDEFGHIJKLMNOPQRSTUVWXYZ", new Vector4f(1,0,0,1), 0.175f, text);
         textComponent.setHudComponent(textHudComponent);
         text.addComponent(textComponent);
-        scene.addGameObjectToScene(text);
+        scene.addGameObjectToScene(text);*/
 
 
         //PLAYERHEALHUD
@@ -113,6 +118,9 @@ public class GamePlay {
 
         playerHealHud.addComponent(playerHealHudComponent);
         scene.addGameObjectToScene(playerHealHud);
+
+        displayItem = new DisplayItem();
+
     }
 
     private static Transform generatePlayer(Scene scene){

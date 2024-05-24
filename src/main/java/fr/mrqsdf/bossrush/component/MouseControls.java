@@ -1,9 +1,9 @@
 package fr.mrqsdf.bossrush.component;
 
 import fr.mrqsdf.bossrush.animation.player.PlayerAnimationTrigger;
-import fr.mrqsdf.bossrush.res.GameState;
-import fr.mrqsdf.bossrush.res.ItemType;
-import fr.mrqsdf.bossrush.res.PotionType;
+import fr.mrqsdf.bossrush.res.*;
+import fr.mrqsdf.bossrush.scene.GamePlay;
+import fr.mrqsdf.bossrush.scene.GameSceneInitializer;
 import fr.mrqsdf.bossrush.util.Utils;
 import fr.mrqsdf.engine2d.components.Component;
 import fr.mrqsdf.engine2d.components.StateMachine;
@@ -25,8 +25,11 @@ public class MouseControls extends Component {
     private float switchGameStatesTime = 0.8f;
     private float switchGameStates = switchGameStatesTime;
 
+    private DisplayItem displayItem = null;
+
     @Override
     public void update(float dt){
+        if (displayItem == null) displayItem = GamePlay.displayItem;
         debounce -= dt;
         if (GameState.gameState != GameState.MOB_ACTION) switchGameStates -= dt;
         if (switchGameStates < 0 ){
@@ -50,8 +53,13 @@ public class MouseControls extends Component {
             GameObject inventory = currentScene.getGameObjectWithComponent(InventoryComponent.class);
             System.out.println(pickedObj);
             if (pickedObj != null){
+                System.out.println(pickedObj.name);
                 DisplayComponent displayComponent = pickedObj.getComponent(DisplayComponent.class);
+                if (displayComponent == null || displayComponent.displayState != DisplayState.USABLE){
+                    displayItem.hide();
+                }
                 if (displayComponent != null){
+                    System.out.println(displayComponent.displayState);
                     GameCamera gameCamera = gameObject.getComponent(GameCamera.class);
                     StateMachine stateMachine = gameCamera.cameraGameObject.getComponent(StateMachine.class);
                     if (!gameCamera.gameover && GameState.gameState == GameState.WAIT){
@@ -76,12 +84,20 @@ public class MouseControls extends Component {
                                 System.out.println("Player open inventory");
                             }
                             case ITEM -> {
-                                System.out.println("Player use item");
-                                ItemComponent itemComponent = pickedObj.getComponent(ItemComponent.class);
-                                InventoryComponent inventoryComponent = inventory.getComponent(InventoryComponent.class);
-                                itemComponent.use(gameCamera);
-                                inventoryComponent.removeItem(pickedObj);
-                                pickedObj.destroy();
+                                displayItem.show(pickedObj);
+                                System.out.println("Player select item");
+                            }
+                            case USABLE -> {
+                                System.out.println("Player usable");
+                                if (displayItem.item != null) displayItem.use(gameCamera, inventory);
+                            }
+
+                        }
+                    } else if (gameCamera.gameover) {
+                        switch (displayComponent.displayState){
+                            case GAME_OVER -> {
+                                System.out.println("Player reset");
+                                Window.changeScene(new GameSceneInitializer(), 0);
                             }
                         }
                     }

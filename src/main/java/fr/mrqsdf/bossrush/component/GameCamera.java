@@ -2,6 +2,7 @@ package fr.mrqsdf.bossrush.component;
 
 import fr.mrqsdf.bossrush.animation.mobs.SlimeAnimation;
 import fr.mrqsdf.bossrush.animation.player.PlayerAnimationTrigger;
+import fr.mrqsdf.bossrush.res.DisplayItem;
 import fr.mrqsdf.bossrush.res.DisplayState;
 import fr.mrqsdf.bossrush.res.GameState;
 import fr.mrqsdf.bossrush.res.MobAction;
@@ -12,7 +13,9 @@ import fr.mrqsdf.engine2d.components.Component;
 import fr.mrqsdf.engine2d.components.HudComponent;
 import fr.mrqsdf.engine2d.components.StateMachine;
 import fr.mrqsdf.engine2d.editor.AssetsWindow;
+import fr.mrqsdf.engine2d.font.TextComponent;
 import fr.mrqsdf.engine2d.jade.*;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +37,9 @@ public class GameCamera extends Component {
     private transient GameObject actualEnemy;
 
 
+    public float descriptionItemX = 3.5f;
+    public float descriptionItemY = 1.25f;
+
 
     public GameCamera(Camera gameCamera) {
         this.gameCamera = gameCamera;
@@ -42,7 +48,8 @@ public class GameCamera extends Component {
     @Override
     public void start(){
         this.cameraGameObject = Window.getScene().getGameObjectWithComponent(PlayerComponent.class);
-        hudGameObjects = Window.getScene().getGameObjects().stream().filter(go -> go.getComponent(HudComponent.class) != null && !hudGameObjects.contains(go)).toList(); //todo opti ici
+        hudGameObjects = Window.getScene().getGameObjects().stream().filter(go -> go.getComponent(HudComponent.class) != null && !hudGameObjects.contains(go)).toList();
+        System.out.println("hud size" + hudGameObjects.size());
         gameCamera.position.y = highestY;
         gameCamera.position.x = 1.5f;
         gameCamera.setZoom(zoom);
@@ -51,6 +58,8 @@ public class GameCamera extends Component {
     @Override
     public void update(float dt){
         if (GameState.gameState == GameState.MOVE){
+            descriptionItemX += 0.2f;
+            descriptionItemX += 0.2f;
             gameCamera.position.x += 0.2f;
             if (cameraGameObject != null){
                 cameraGameObject.transform.position.x += 0.2f;
@@ -110,6 +119,16 @@ public class GameCamera extends Component {
                 GameObject gameOver = Prefabs.generateSpriteObject(AssetsWindow.getSpriteSheet("assets/spritesheets/hud/GameOver.spsheet").getSprite(0), 2,0.5f,transform.position.x,transform.position.y,0,10);
                 gameOver.setNoSerialize();
                 Window.getScene().addGameObjectToScene(gameOver);
+                transform.position.y -= 0.5f;
+                GameObject resetButton = Prefabs.generateSpriteObject(AssetsWindow.getSpriteSheet("assets/spritesheets/hud/display2.spsheet").getSprite(0), 0.5f,0.25f,transform.position.x,transform.position.y,0,10);
+                resetButton.name = "ResetButton";
+                resetButton.setNoSerialize();
+                resetButton.addComponent(new DisplayComponent(DisplayState.GAME_OVER));
+                TextComponent textComponent = new TextComponent("Reset", new Vector4f(1), 0.1f, resetButton);
+                textComponent.addCharacterComponent(new DisplayComponent(DisplayState.GAME_OVER));
+                textComponent.setDefaultPosition(transform.position.x - 0.1f, transform.position.y);
+                resetButton.addComponent(textComponent);
+                Window.getScene().addGameObjectToScene(resetButton);
             }
         }
         else if (GameState.gameState == GameState.MOB_ACTION) {
@@ -132,6 +151,10 @@ public class GameCamera extends Component {
 
     public GameObject getActualEnemy() {
         return actualEnemy;
+    }
+
+    public void addHud(GameObject gameObject){
+        hudGameObjects.add(gameObject);
     }
 
 }

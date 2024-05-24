@@ -16,15 +16,41 @@ public class TextComponent extends Component {
     public Vector4f color;
     public float size;
     private List<GameObject> characters = new ArrayList<>();
-    private boolean isVisible = false;
+    private boolean isVisible = true;
     private List<Component> characterComponents = new ArrayList<>();
     private HudComponent hudComponent;
+
+    private float defaultX = 0;
+    private float defaultY = 0;
 
     public TextComponent(String text, Vector4f color, float size){
         this.text = text;
         this.color = color;
         this.size = size;
     }
+    public TextComponent(String text, Vector4f color, float size, float defaultX, float defaultY){
+        this.text = text;
+        this.color = color;
+        this.size = size;
+        this.defaultX = defaultX;
+        this.defaultY = defaultY;
+    }
+    public TextComponent(String text, Vector4f color, float size, GameObject gameObject){
+        this.text = text;
+        this.color = color;
+        this.size = size;
+        this.defaultX = gameObject.transform.position.x;
+        this.defaultY = gameObject.transform.position.y;
+    }
+    public TextComponent(String text, Vector4f color, float size, GameObject gameObject, HudComponent hudComponent){
+        this.text = text;
+        this.color = color;
+        this.size = size;
+        this.defaultX = gameObject.transform.position.x;
+        this.defaultY = gameObject.transform.position.y;
+        this.hudComponent = hudComponent;
+    }
+
 
     public void addCharacterComponent(Component component){
         characterComponents.add(component);
@@ -34,17 +60,37 @@ public class TextComponent extends Component {
         this.hudComponent = hudComponent;
     }
 
+    public void removeCharacter(){
+        for (GameObject character : characters){
+            hudComponent.removeObject(character);
+            character.destroy();
+        }
+    }
+
+
+    public void setDefaultX(float defaultX){
+        this.defaultX = defaultX;
+    }
+
+    public void setDefaultY(float defaultY){
+        this.defaultY = defaultY;
+    }
+
+    public void setDefaultPosition(float defaultX, float defaultY){
+        this.defaultX = defaultX;
+        this.defaultY = defaultY;
+    }
+
     @Override
     public void start(){
         float x =0;
         float y =0;
         for (Character c : text.toCharArray()){
             Sprite sprite = TextData.getCharacter(c);
-            float posX = gameObject.transform.position.x + x;
-            float posY = gameObject.transform.position.y + y;
-            GameObject character = Prefabs.generateSpriteObject(sprite, size, size, 0, 0, 0, 6);
+            float posX = defaultX + x;
+            float posY = defaultY + y;
+            GameObject character = Prefabs.generateSpriteObject(sprite, size, size, 0, 0, 0, gameObject.transform.zIndex+1);
             character.transform.position = new Vector2f(posX, posY);
-            System.out.println("posX: " + posX + " posY: " + posY);
             character.getComponent(SpriteRenderer.class).setColor(color);
             characters.add(character);
             character.setNoSerialize();
@@ -58,8 +104,8 @@ public class TextComponent extends Component {
                 character.addComponent(component);
             }
             Window.getScene().addGameObjectToScene(character);
-            if (c == ' ') x += 0.25f * size;
-            else x += 0.5f * size;
+            if (c == ' ') x += TextData.spaceEscape * size;
+            else x += TextData.spaceWidth * size;
         }
     }
 

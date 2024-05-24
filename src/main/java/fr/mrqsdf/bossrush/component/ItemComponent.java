@@ -6,6 +6,9 @@ import fr.mrqsdf.engine2d.components.Component;
 public abstract class ItemComponent extends Component {
 
     public ItemType itemType;
+    public String name;
+    public String effect;
+    public boolean usable = false;
 
     public ItemComponent(ItemType type) {
         this.itemType = type;

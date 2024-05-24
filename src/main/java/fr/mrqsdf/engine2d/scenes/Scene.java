@@ -169,7 +169,6 @@ public class Scene {
                 this.renderer.add(go);
             }
             if (go.isDead()) {
-                System.out.println("Destroying " + go.name);
                 gameObjects.remove(i);
                 this.renderer.destroyGameObject(go);
                 this.physics2D.destroyGameObject(go);
@@ -191,7 +190,6 @@ public class Scene {
                 this.renderer.add(go);
             }
             if (go.isDead()) {
-                System.out.println("Destroying " + go.name);
                 gameObjects.remove(i);
                 this.renderer.destroyGameObject(go);
                 this.physics2D.destroyGameObject(go);
